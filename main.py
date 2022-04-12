@@ -6,7 +6,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("First application")
+        self.setWindowTitle("Testing push to github")
 
         button = QPushButton("Click")
 
