@@ -1,24 +1,24 @@
 import sys
 
-from mainmenuwidget import MainMenu
+from controller import Controller
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction
-from PyQt6.QtWidgets import QApplication, QPushButton, QWidget, QMainWindow, QMenu, QVBoxLayout
+from PyQt6.QtWidgets import QApplication, QPushButton, QWidget, QMainWindow, QMenu, QVBoxLayout, QMessageBox
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        
-        mainMenu = MainMenu()
-        self.setCentralWidget(mainMenu)
+        self.controller = Controller(self)
+        self.controller.showMainMenu()
 
 
 
-app = QApplication(sys.argv)
+def main():
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec())
 
-window = MainWindow()
-window.show()
-
-# Start the event loop.
-app.exec()
+if __name__ == '__main__':
+    main()
