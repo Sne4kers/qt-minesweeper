@@ -36,7 +36,7 @@ class MainWindow(QMainWindow):
         self.stackedWidget.setCurrentIndex(2)
 
     def getAreaSize(self):
-        self.settingsMenu.getAreaSize()
+        return self.settingsMenu.getAreaSize()
 
 
 def main():
