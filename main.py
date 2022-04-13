@@ -1,17 +1,18 @@
-from PyQt6.QtWidgets import QApplication, QPushButton, QMainWindow
-from PyQt6.QtCore import Qt, QSize
 import sys
+
+from mainmenuwidget import MainMenu
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QAction
+from PyQt6.QtWidgets import QApplication, QPushButton, QWidget, QMainWindow, QMenu, QVBoxLayout
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        
+        mainMenu = MainMenu()
+        self.setCentralWidget(mainMenu)
 
-        self.setWindowTitle("Testing push to github")
-
-        button = QPushButton("Click")
-
-        self.setFixedSize(QSize(400, 300))
-        self.setCentralWidget(button)
 
 
 app = QApplication(sys.argv)
