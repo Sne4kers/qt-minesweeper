@@ -52,4 +52,7 @@ class SettingsMenu(QWidget):
         layout.addLayout(heightHBox)
 
         self.setLayout(layout)
+
+    def getAreaSize(self):
+        return (self.width, self.height)
     

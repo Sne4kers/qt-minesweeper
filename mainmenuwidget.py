@@ -7,7 +7,8 @@ class MainMenu(QWidget):
         layout = QVBoxLayout()
         
         startButton = QPushButton("Start")
-        
+        startButton.clicked.connect(self.window.showGameScreen)
+
         settingsButton = QPushButton("Settings")
         settingsButton.clicked.connect(self.window.showSettingsMenu)
 
