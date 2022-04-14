@@ -7,6 +7,7 @@ class SettingsMenu(QWidget):
         self.window = window
         self.width = 8
         self.height = 16
+        self.mines = 10
         
         backButton = QPushButton("<-")
         backButton.setFixedSize(30, 30)
@@ -47,18 +48,38 @@ class SettingsMenu(QWidget):
         heightHBox.addWidget(gameAreaHeightLabel)
         heightHBox.addWidget(self.heightSpinBox)
 
+        minesLabel = QLabel("Number of mines")
+        minesLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
+        self.minesSpinBox = QSpinBox()
+        self.minesSpinBox.setMinimum(10)
+        self.minesSpinBox.setMaximum(30)
+        self.minesSpinBox.setValue(self.mines)
+        self.minesSpinBox.valueChanged.connect(self.updateMines)
+
+        minesHBox = QHBoxLayout()
+        minesHBox.addWidget(minesLabel)
+        minesHBox.addWidget(self.minesSpinBox)
+
 
         layout = QVBoxLayout()
         layout.addLayout(settingsHBox)
         layout.addLayout(widthHBox)
         layout.addLayout(heightHBox)
+        layout.addLayout(minesHBox)
 
         self.setLayout(layout)
 
     def getAreaSize(self):
         return (self.width, self.height)
     
+    def getNumberOfMines(self):
+        return self.mines
+
     def updateSize(self):
         self.height = self.heightSpinBox.value()
         self.width = self.widthSpinBox.value()
+    
+    def updateMines(self):
+        self.mines = self.minesSpinBox.value()
     

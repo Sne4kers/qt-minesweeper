@@ -22,7 +22,7 @@ class GameScreen(QWidget):
         self.widgetLayout = QVBoxLayout()        
         self.widgetLayout.addLayout(self.titleHBox)
 
-        self.game_area = GameArea(window.getAreaSize(), parent=self)
+        self.game_area = GameArea(self.window.getAreaSize(), self.window.getNumberOfMines(), parent=self)
 
         self.widgetLayout.addWidget(self.game_area)
 
@@ -30,5 +30,5 @@ class GameScreen(QWidget):
 
     def init_game_area(self):
         self.game_area.setParent(None)
-        self.game_area = GameArea(self.window.getAreaSize(), parent=self)
+        self.game_area = GameArea(self.window.getAreaSize(), self.window.getNumberOfMines(), parent=self)
         self.widgetLayout.addWidget(self.game_area)

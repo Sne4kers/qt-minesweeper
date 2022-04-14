@@ -39,6 +39,9 @@ class MainWindow(QMainWindow):
     def getAreaSize(self):
         return self.settingsMenu.getAreaSize()
 
+    def getNumberOfMines(self):
+        return self.settingsMenu.getNumberOfMines()
+
 
 def main():
     app = QApplication(sys.argv)
