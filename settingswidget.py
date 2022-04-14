@@ -23,27 +23,29 @@ class SettingsMenu(QWidget):
         gameAreaWidthLabel = QLabel("Area width")
         gameAreaWidthLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
-        widthSpinBox = QSpinBox()
-        widthSpinBox.setMinimum(5)
-        widthSpinBox.setMaximum(20)
-        widthSpinBox.setValue(self.width)
+        self.widthSpinBox = QSpinBox()
+        self.widthSpinBox.setMinimum(5)
+        self.widthSpinBox.setMaximum(20)
+        self.widthSpinBox.setValue(self.width)
+        self.widthSpinBox.valueChanged.connect(self.updateSize)
 
         widthHBox = QHBoxLayout()
         widthHBox.addWidget(gameAreaWidthLabel)
-        widthHBox.addWidget(widthSpinBox)
+        widthHBox.addWidget(self.widthSpinBox)
         
 
         gameAreaHeightLabel = QLabel("Area height")
         gameAreaHeightLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
-        heightSpinBox = QSpinBox()
-        heightSpinBox.setMinimum(10)
-        heightSpinBox.setMaximum(30)
-        heightSpinBox.setValue(self.height)
+        self.heightSpinBox = QSpinBox()
+        self.heightSpinBox.setMinimum(10)
+        self.heightSpinBox.setMaximum(30)
+        self.heightSpinBox.setValue(self.height)
+        self.heightSpinBox.valueChanged.connect(self.updateSize)
 
         heightHBox = QHBoxLayout()
         heightHBox.addWidget(gameAreaHeightLabel)
-        heightHBox.addWidget(heightSpinBox)
+        heightHBox.addWidget(self.heightSpinBox)
 
 
         layout = QVBoxLayout()
@@ -55,4 +57,8 @@ class SettingsMenu(QWidget):
 
     def getAreaSize(self):
         return (self.width, self.height)
+    
+    def updateSize(self):
+        self.height = self.heightSpinBox.value()
+        self.width = self.widthSpinBox.value()
     

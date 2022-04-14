@@ -1,5 +1,6 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QSpinBox, QPushButton
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QPushButton
 from PyQt6.QtCore import Qt
+from gamearea import GameArea
 
 class GameScreen(QWidget):
     def __init__(self, window):
@@ -14,11 +15,15 @@ class GameScreen(QWidget):
         gameScreenLabel = QLabel("Minesweeper")
         gameScreenLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        titleHBox = QHBoxLayout()
-        titleHBox.addWidget(backButton)
-        titleHBox.addWidget(gameScreenLabel)
+        self.titleHBox = QHBoxLayout()
+        self.titleHBox.addWidget(backButton)
+        self.titleHBox.addWidget(gameScreenLabel)
 
-        layout = QVBoxLayout()
-        layout.addLayout(titleHBox)
+        self.widgetLayout = QVBoxLayout()        
+        self.widgetLayout.addLayout(self.titleHBox)
 
-        self.setLayout(layout)
+        self.game_area = GameArea(window.getAreaSize(), parent=self)
+
+        self.widgetLayout.addWidget(self.game_area)
+
+        self.setLayout(self.widgetLayout)
