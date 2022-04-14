@@ -27,3 +27,8 @@ class GameScreen(QWidget):
         self.widgetLayout.addWidget(self.game_area)
 
         self.setLayout(self.widgetLayout)
+
+    def init_game_area(self):
+        self.game_area.setParent(None)
+        self.game_area = GameArea(self.window.getAreaSize(), parent=self)
+        self.widgetLayout.addWidget(self.game_area)

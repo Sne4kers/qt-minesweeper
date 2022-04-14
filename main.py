@@ -20,19 +20,20 @@ class MainWindow(QMainWindow):
         self.stackedWidget.addWidget(self.settingsMenu)
         self.stackedWidget.addWidget(self.gameScreen)
 
-        self.setMinimumSize(QSize(300, 120))
         self.setCentralWidget(self.stackedWidget)
-
+        self.showMainMenu()
         self.setWindowTitle("Minesweeper")
 
 
     def showMainMenu(self):
+        self.setFixedSize(QSize(self.getAreaSize()[0]*25 + 50, self.getAreaSize()[1]*25 + 50))
         self.stackedWidget.setCurrentIndex(0)
 
     def showSettingsMenu(self):
         self.stackedWidget.setCurrentIndex(1)
     
     def showGameScreen(self):
+        self.gameScreen.init_game_area()
         self.stackedWidget.setCurrentIndex(2)
 
     def getAreaSize(self):
