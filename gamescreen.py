@@ -19,8 +19,14 @@ class GameScreen(QWidget):
         self.titleHBox.addWidget(backButton)
         self.titleHBox.addWidget(gameScreenLabel)
 
+        restartBox = QHBoxLayout()
+        restartButton = QPushButton(":)")
+        restartButton.clicked.connect(self.init_game_area)
+        restartBox.addWidget(restartButton)
+
         self.widgetLayout = QVBoxLayout()        
         self.widgetLayout.addLayout(self.titleHBox)
+        self.widgetLayout.addLayout(restartBox)
 
         self.game_area = GameArea(self.window.getAreaSize(), self.window.getNumberOfMines(), parent=self)
 
