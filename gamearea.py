@@ -14,6 +14,16 @@ class GameArea(QWidget):
         self.height = gridSize[1]
         self.clicked = {}
         self.marked = {}
+        self.adjacency_list = [
+            (1, 0),
+            (1, -1),
+            (1, 1),
+            (-1, 0),
+            (-1, 1),
+            (-1, -1),
+            (0, 1),
+            (0, -1)
+            ]
         self.gridButtonLayout = QGridLayout()
         self.gridButtonLayout.setSpacing(0)
         for i in range(self.height):
@@ -48,39 +58,13 @@ class GameArea(QWidget):
             pressedButton.setStyleSheet('QPushButton {background-color: #FF0000}')
         else:
             count = 0
-            if (i + 1, j) in self.grid:
-                count += 1
-            if (i - 1, j) in self.grid:
-                count += 1
-            if (i, j - 1) in self.grid:
-                count += 1
-            if (i, j + 1) in self.grid:
-                count += 1
-            if (i + 1, j + 1) in self.grid:
-                count += 1
-            if (i - 1, j + 1) in self.grid:
-                count += 1
-            if (i + 1, j - 1) in self.grid:
-                count += 1
-            if (i - 1, j - 1) in self.grid:
-                count += 1
+            for pair in self.adjacency_list:
+                if (i + pair[0], j + pair[1]) in self.grid:
+                    count += 1
             if count == 0:
-                if (i + 1, j) not in self.clicked:
-                    self.button_clicked(i + 1, j)
-                if (i - 1, j) not in self.clicked:
-                    self.button_clicked(i - 1, j)
-                if (i, j - 1) not in self.clicked:
-                    self.button_clicked(i, j - 1)
-                if (i, j + 1) not in self.clicked:
-                    self.button_clicked(i, j + 1)
-                if (i + 1, j + 1) not in self.clicked:
-                    self.button_clicked(i + 1, j + 1)
-                if (i - 1, j + 1) not in self.clicked:
-                    self.button_clicked(i - 1, j + 1)
-                if (i + 1, j - 1) not in self.clicked:
-                    self.button_clicked(i + 1, j - 1)
-                if (i - 1, j - 1) not in self.clicked:
-                    self.button_clicked(i - 1, j - 1)
+                for pair in self.adjacency_list:
+                    if (i + pair[0], j + pair[1]) not in self.clicked:
+                        self.button_clicked(i + pair[0], j + pair[1])
             pressedButton.setEnabled(False)
             if count != 0:
                 pressedButton.setText(str(count))
@@ -99,12 +83,8 @@ class GameArea(QWidget):
             return 'QPushButton {background-color: #000000; color: #AA00AA; border: none}'
 
     def fail(self):
-        print("Start")
         self.gameEnded.emit()
-        print("end")
         for bombCord in self.grid:
-            print(bombCord[1])
-            print(bombCord[0])
             pressedButton = self.gridButtonLayout.itemAtPosition(bombCord[0], bombCord[1]).widget()
             pressedButton.setStyleSheet('QPushButton {background-color: #FF8888}')
         for i in range(self.height):

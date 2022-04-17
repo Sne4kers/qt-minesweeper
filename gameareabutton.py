@@ -12,6 +12,5 @@ class MineButton(QPushButton):
         if event.button() == Qt.MouseButton.RightButton:
             self.marked.emit()
         elif event.button() == Qt.MouseButton.LeftButton:
-            print("left")
             self.clicked.emit()
         event.accept()

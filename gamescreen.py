@@ -43,5 +43,4 @@ class GameScreen(QWidget):
         self.widgetLayout.addWidget(self.game_area)
 
     def game_end(self):
-        print("SIGNAL DETECTED")
         self.restartButton.setText(":(")
