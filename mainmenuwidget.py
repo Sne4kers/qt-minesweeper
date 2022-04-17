@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout
+from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QSpacerItem, QSizePolicy
 
 class MainMenu(QWidget):
     def __init__(self, window, *args, **kwargs):
@@ -15,8 +15,12 @@ class MainMenu(QWidget):
         quitButton = QPushButton("Quit")
         quitButton.clicked.connect(QApplication.quit)
 
+        spacer = QSpacerItem(20, 40, hPolicy=QSizePolicy.Policy.Expanding, vPolicy=QSizePolicy.Policy.Expanding)
+        
+        layout.addItem(spacer)
         layout.addWidget(startButton)
         layout.addWidget(settingsButton)
         layout.addWidget(quitButton)
+        layout.addItem(spacer)
 
         self.setLayout(layout)

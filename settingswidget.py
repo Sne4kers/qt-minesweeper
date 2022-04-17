@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QSpinBox, QPushButton
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QSpinBox, QPushButton, QSpacerItem, QSizePolicy
 from PyQt6.QtCore import Qt
 
 class SettingsMenu(QWidget):
@@ -61,12 +61,15 @@ class SettingsMenu(QWidget):
         minesHBox.addWidget(minesLabel)
         minesHBox.addWidget(self.minesSpinBox)
 
+        spacer = QSpacerItem(20, 40, hPolicy=QSizePolicy.Policy.Expanding, vPolicy=QSizePolicy.Policy.Expanding)
 
         layout = QVBoxLayout()
+        layout.addItem(spacer)
         layout.addLayout(settingsHBox)
         layout.addLayout(widthHBox)
         layout.addLayout(heightHBox)
         layout.addLayout(minesHBox)
+        layout.addItem(spacer)
 
         self.setLayout(layout)
 
