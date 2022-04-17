@@ -7,7 +7,7 @@ class SettingsMenu(QWidget):
         self.window = window
         self.width = 8
         self.height = 16
-        self.mines = 10
+        self.mines = 20
         
         backButton = QPushButton("<-")
         backButton.setFixedSize(30, 30)

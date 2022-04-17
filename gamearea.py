@@ -1,5 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QPushButton, QGridLayout, QSizePolicy
 from PyQt6.QtCore import Qt, QSize, pyqtSignal
+from gameareabutton import MineButton
+
 import random
 
 class GameArea(QWidget):
@@ -11,16 +13,18 @@ class GameArea(QWidget):
         self.width = gridSize[0]
         self.height = gridSize[1]
         self.clicked = {}
+        self.marked = {}
         self.gridButtonLayout = QGridLayout()
         self.gridButtonLayout.setSpacing(0)
         for i in range(self.height):
             for j in range(self.width):
-                button = QPushButton(parent=self)
+                button = MineButton()
                 button.setMinimumSize(QSize(20, 20))
                 button.setMaximumSize(QSize(30, 30))
                 button.setStyleSheet('QPushButton {background-color: #808080}')
                 button.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
-                button.clicked.connect(lambda ch, j=j, i=i: self.button_clicked(i, j))
+                button.clicked.connect(lambda j=j, i=i: self.button_clicked(i, j))
+                button.marked.connect(lambda j=j, i=i: self.button_marked(i, j))
                 self.gridButtonLayout.addWidget(button, i, j)
         self.setLayout(self.gridButtonLayout)
         for i in range(numberMines):
@@ -32,6 +36,8 @@ class GameArea(QWidget):
             self.grid[(yRandomMine, xRandomMine)] = -1
 
     def button_clicked(self, i, j):
+        if (i, j) in self.marked:
+            return
         self.clicked[(i, j)] = True
         if i < 0 or j < 0 or i >= self.height or j >= self.width:
             return
@@ -105,3 +111,12 @@ class GameArea(QWidget):
             for j in range(self.width):
                 button = self.gridButtonLayout.itemAtPosition(i, j).widget()
                 button.setEnabled(False)
+
+    def button_marked(self, i, j):
+        pressedButton = self.gridButtonLayout.itemAtPosition(i, j).widget()
+        if (i, j) in self.marked:
+            self.marked.pop((i, j))
+            pressedButton.setText("")
+        else:
+            self.marked[(i, j)] = True
+            pressedButton.setText("M")
