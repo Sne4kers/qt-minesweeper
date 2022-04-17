@@ -1,8 +1,10 @@
 from PyQt6.QtWidgets import QWidget, QPushButton, QGridLayout, QSizePolicy
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import Qt, QSize, pyqtSignal
 import random
 
 class GameArea(QWidget):
+    gameEnded = pyqtSignal(name="gameEnded")
+
     def __init__(self, gridSize, numberMines, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.grid = {}
@@ -91,6 +93,9 @@ class GameArea(QWidget):
             return 'QPushButton {background-color: #000000; color: #AA00AA; border: none}'
 
     def fail(self):
+        print("Start")
+        self.gameEnded.emit()
+        print("end")
         for bombCord in self.grid:
             print(bombCord[1])
             print(bombCord[0])
