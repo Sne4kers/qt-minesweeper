@@ -9,6 +9,12 @@ class SettingsMenu(QWidget):
         self.height = 16
         self.mines = 20
         
+        self.minesSpinBox = QSpinBox()
+        self.minesSpinBox.setMinimum(int(self.height * self.width * 0.05))
+        self.minesSpinBox.setMaximum(int(self.height * self.width * 0.2))
+        self.minesSpinBox.setValue(self.mines)
+        self.minesSpinBox.valueChanged.connect(self.updateMines)
+
         backButton = QPushButton("<-")
         backButton.setFixedSize(30, 30)
         backButton.clicked.connect(self.window.showMainMenu)
@@ -40,7 +46,7 @@ class SettingsMenu(QWidget):
         
         self.heightSpinBox = QSpinBox()
         self.heightSpinBox.setMinimum(10)
-        self.heightSpinBox.setMaximum(30)
+        self.heightSpinBox.setMaximum(40)
         self.heightSpinBox.setValue(self.height)
         self.heightSpinBox.valueChanged.connect(self.updateSize)
 
@@ -50,12 +56,6 @@ class SettingsMenu(QWidget):
 
         minesLabel = QLabel("Number of mines")
         minesLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        
-        self.minesSpinBox = QSpinBox()
-        self.minesSpinBox.setMinimum(10)
-        self.minesSpinBox.setMaximum(30)
-        self.minesSpinBox.setValue(self.mines)
-        self.minesSpinBox.valueChanged.connect(self.updateMines)
 
         minesHBox = QHBoxLayout()
         minesHBox.addWidget(minesLabel)
@@ -82,6 +82,8 @@ class SettingsMenu(QWidget):
     def updateSize(self):
         self.height = self.heightSpinBox.value()
         self.width = self.widthSpinBox.value()
+        self.minesSpinBox.setMinimum(int(self.height * self.width * 0.05))
+        self.minesSpinBox.setMaximum(int(self.height * self.width * 0.2))
     
     def updateMines(self):
         self.mines = self.minesSpinBox.value()
