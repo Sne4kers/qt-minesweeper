@@ -42,5 +42,8 @@ class GameScreen(QWidget):
         self.game_area.gameEnded.connect(self.game_end)
         self.widgetLayout.addWidget(self.game_area)
 
+    def generate_new_schema(self):
+        self.game_area.generate_new_schema()
+
     def game_end(self):
         self.restartButton.setText(":(")

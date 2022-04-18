@@ -53,9 +53,14 @@ class GameArea(QWidget):
             return
         pressedButton = self.gridButtonLayout.itemAtPosition(i, j).widget()
         if (i, j) in self.grid:
-            self.fail()
-            pressedButton.setText("B")
-            pressedButton.setStyleSheet('QPushButton {background-color: #FF0000}')
+            if len(self.clicked) == 1:
+                while (i, j) in self.grid:
+                    self.generate_new_schema()
+                self.button_clicked(i, j)
+            else:
+                self.fail()
+                pressedButton.setText("B")
+                pressedButton.setStyleSheet('QPushButton {background-color: #FF0000}')
         else:
             count = 0
             for pair in self.adjacency_list:
@@ -100,3 +105,23 @@ class GameArea(QWidget):
         else:
             self.marked[(i, j)] = True
             pressedButton.setText("M")
+
+    def generate_new_schema(self):
+        numberMines = len(self.grid)
+        self.clicked = {}
+        self.marked = {}
+        self.grid = {}
+        for i in range(self.height):
+            for j in range(self.width):
+                button = self.gridButtonLayout.itemAtPosition(i, j).widget()
+                button.clicked.disconnect()
+                button.marked.disconnect()
+                button.clicked.connect(lambda j=j, i=i: self.button_clicked(i, j))
+                button.marked.connect(lambda j=j, i=i: self.button_marked(i, j))
+        for i in range(numberMines):
+            xRandomMine = random.randint(0, self.width - 1)
+            yRandomMine = random.randint(0, self.height - 1)
+            while (yRandomMine, xRandomMine) in self.grid:
+                xRandomMine = random.randint(0, self.width - 1)
+                yRandomMine = random.randint(0, self.height - 1)
+            self.grid[(yRandomMine, xRandomMine)] = -1

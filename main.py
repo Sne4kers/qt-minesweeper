@@ -33,7 +33,7 @@ class MainWindow(QMainWindow):
         self.stackedWidget.setCurrentIndex(1)
     
     def showGameScreen(self):
-        self.gameScreen.init_game_area()
+        self.gameScreen.generate_new_schema()
         self.stackedWidget.setCurrentIndex(2)
 
     def getAreaSize(self):
