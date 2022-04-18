@@ -6,6 +6,7 @@ import random
 
 class GameArea(QWidget):
     gameEnded = pyqtSignal(name="gameEnded")
+    markedCell = pyqtSignal(int)
 
     def __init__(self, gridSize, numberMines, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -100,9 +101,11 @@ class GameArea(QWidget):
     def button_marked(self, i, j):
         pressedButton = self.gridButtonLayout.itemAtPosition(i, j).widget()
         if (i, j) in self.marked:
+            self.markedCell.emit(1)
             self.marked.pop((i, j))
             pressedButton.setText("")
         else:
+            self.markedCell.emit(-1)
             self.marked[(i, j)] = True
             pressedButton.setText("M")
 

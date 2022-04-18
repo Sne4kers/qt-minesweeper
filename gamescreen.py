@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QPushButton
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QLCDNumber
 from PyQt6.QtCore import Qt
 from gamearea import GameArea
 
@@ -20,6 +20,11 @@ class GameScreen(QWidget):
         self.titleHBox.addWidget(gameScreenLabel)
 
         restartBox = QHBoxLayout()
+
+        self.mineCounter = QLCDNumber()
+        self.mineCounter.setDecMode()
+        restartBox.addWidget(self.mineCounter)
+
         self.restartButton = QPushButton(":)")
         self.restartButton.clicked.connect(self.init_game_area)
         restartBox.addWidget(self.restartButton)
@@ -30,6 +35,8 @@ class GameScreen(QWidget):
 
         self.game_area = GameArea(self.window.getAreaSize(), self.window.getNumberOfMines(), parent=self)
         self.game_area.gameEnded.connect(self.game_end)
+        self.mineCounter.display(len(self.game_area.grid))
+        self.game_area.markedCell.connect(self.mineCounterSlot)
 
         self.widgetLayout.addWidget(self.game_area)
 
@@ -40,10 +47,16 @@ class GameScreen(QWidget):
         self.game_area.setParent(None)
         self.game_area = GameArea(self.window.getAreaSize(), self.window.getNumberOfMines(), parent=self)
         self.game_area.gameEnded.connect(self.game_end)
+        self.game_area.markedCell.connect(self.mineCounterSlot)
+        self.mineCounter.display(len(self.game_area.grid))
         self.widgetLayout.addWidget(self.game_area)
 
     def generate_new_schema(self):
         self.game_area.generate_new_schema()
+        self.mineCounter.display(len(self.game_area.grid))
 
     def game_end(self):
         self.restartButton.setText(":(")
+
+    def mineCounterSlot(self, diff):
+        self.mineCounter.display(self.mineCounter.value() + diff)
