@@ -46,7 +46,7 @@ class SettingsMenu(QWidget):
         
         self.heightSpinBox = QSpinBox()
         self.heightSpinBox.setMinimum(10)
-        self.heightSpinBox.setMaximum(40)
+        self.heightSpinBox.setMaximum(30)
         self.heightSpinBox.setValue(self.height)
         self.heightSpinBox.valueChanged.connect(self.updateSize)
 

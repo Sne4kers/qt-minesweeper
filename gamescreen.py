@@ -25,7 +25,7 @@ class GameScreen(QWidget):
         self.mineCounter.setDecMode()
         restartBox.addWidget(self.mineCounter)
 
-        self.restartButton = QPushButton(":)")
+        self.restartButton = QPushButton(":|")
         self.restartButton.clicked.connect(self.init_game_area)
         restartBox.addWidget(self.restartButton)
 
@@ -37,17 +37,19 @@ class GameScreen(QWidget):
         self.game_area.gameEnded.connect(self.game_end)
         self.mineCounter.display(len(self.game_area.grid))
         self.game_area.markedCell.connect(self.mineCounterSlot)
+        self.game_area.gameWon.connect(self.game_won)
 
         self.widgetLayout.addWidget(self.game_area)
 
         self.setLayout(self.widgetLayout)
 
     def init_game_area(self):
-        self.restartButton.setText(":)")
+        self.restartButton.setText(":|")
         self.game_area.setParent(None)
         self.game_area = GameArea(self.window.getAreaSize(), self.window.getNumberOfMines(), parent=self)
         self.game_area.gameEnded.connect(self.game_end)
         self.game_area.markedCell.connect(self.mineCounterSlot)
+        self.game_area.gameWon.connect(self.game_won)
         self.mineCounter.display(len(self.game_area.grid))
         self.widgetLayout.addWidget(self.game_area)
 
@@ -60,3 +62,7 @@ class GameScreen(QWidget):
 
     def mineCounterSlot(self, diff):
         self.mineCounter.display(self.mineCounter.value() + diff)
+    
+    def game_won(self):
+        self.game_area.setDisabled(True)
+        self.restartButton.setText(":)")

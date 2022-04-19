@@ -7,6 +7,7 @@ import random
 class GameArea(QWidget):
     gameEnded = pyqtSignal(name="gameEnded")
     markedCell = pyqtSignal(int)
+    gameWon = pyqtSignal()
 
     def __init__(self, gridSize, numberMines, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,7 +35,7 @@ class GameArea(QWidget):
                 button.setMaximumSize(QSize(30, 30))
                 button.setStyleSheet('QPushButton {background-color: #808080}')
                 button.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
-                button.clicked.connect(lambda j=j, i=i: self.button_clicked(i, j))
+                button.clicked.connect(lambda j=j, i=i: self.button_clicked(i, j, True))
                 button.marked.connect(lambda j=j, i=i: self.button_marked(i, j))
                 self.gridButtonLayout.addWidget(button, i, j)
         self.setLayout(self.gridButtonLayout)
@@ -46,31 +47,36 @@ class GameArea(QWidget):
                 yRandomMine = random.randint(0, self.height - 1)
             self.grid[(yRandomMine, xRandomMine)] = -1
 
-    def button_clicked(self, i, j):
+    def button_clicked(self, i, j, manual):
         if (i, j) in self.marked:
             return
-        self.clicked[(i, j)] = True
+        if (i, j) in self.clicked:
+            return
         if i < 0 or j < 0 or i >= self.height or j >= self.width:
             return
+        self.clicked[(i, j)] = True
         pressedButton = self.gridButtonLayout.itemAtPosition(i, j).widget()
         if (i, j) in self.grid:
             if len(self.clicked) == 1:
                 while (i, j) in self.grid:
                     self.generate_new_schema()
-                self.button_clicked(i, j)
+                self.button_clicked(i, j, True)
             else:
                 self.fail()
                 pressedButton.setText("B")
                 pressedButton.setStyleSheet('QPushButton {background-color: #FF0000}')
         else:
-            count = 0
-            for pair in self.adjacency_list:
-                if (i + pair[0], j + pair[1]) in self.grid:
-                    count += 1
+            if self.check_win():
+                self.gameWon.emit()
+            count = self.get_value(i, j)
             if count == 0:
                 for pair in self.adjacency_list:
-                    if (i + pair[0], j + pair[1]) not in self.clicked:
-                        self.button_clicked(i + pair[0], j + pair[1])
+                    if (i + pair[0], j + pair[1]):
+                        self.button_clicked(i + pair[0], j + pair[1], False)
+            elif manual:
+                for pair in self.adjacency_list:
+                    if (i + pair[0], j + pair[1]) and self.get_value(i + pair[0], j + pair[1]) == 0 and not (i + pair[0], j + pair[1]) in self.grid:
+                        self.button_clicked(i + pair[0], j + pair[1], False)
             pressedButton.setEnabled(False)
             if count != 0:
                 pressedButton.setText(str(count))
@@ -109,6 +115,9 @@ class GameArea(QWidget):
             self.marked[(i, j)] = True
             pressedButton.setText("M")
 
+        if self.check_win():
+            self.gameWon.emit()
+
     def generate_new_schema(self):
         numberMines = len(self.grid)
         self.clicked = {}
@@ -119,7 +128,7 @@ class GameArea(QWidget):
                 button = self.gridButtonLayout.itemAtPosition(i, j).widget()
                 button.clicked.disconnect()
                 button.marked.disconnect()
-                button.clicked.connect(lambda j=j, i=i: self.button_clicked(i, j))
+                button.clicked.connect(lambda j=j, i=i: self.button_clicked(i, j, True))
                 button.marked.connect(lambda j=j, i=i: self.button_marked(i, j))
         for i in range(numberMines):
             xRandomMine = random.randint(0, self.width - 1)
@@ -128,3 +137,16 @@ class GameArea(QWidget):
                 xRandomMine = random.randint(0, self.width - 1)
                 yRandomMine = random.randint(0, self.height - 1)
             self.grid[(yRandomMine, xRandomMine)] = -1
+
+    def check_win(self):
+        if len(self.marked) + len(self.clicked) == self.width * self.height and len(self.marked) == len(self.grid):
+            return True
+        else:
+            return False
+
+    def get_value(self, i, j):
+        count = 0
+        for pair in self.adjacency_list:
+            if (i + pair[0], j + pair[1]) in self.grid:
+                count += 1
+        return count
